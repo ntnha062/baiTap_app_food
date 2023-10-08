@@ -1,0 +1,85 @@
+---User table---
+CREATE TABLE users(
+	user_id INT PRIMARY KEY AUTO_INCREMENT,
+	full_name VARCHAR(150) NOT NULL,
+	email VARCHAR(200) NOT NULL,
+	password VARCHAR(20) NOT NULL
+
+);
+---Restaurant table---
+CREATE TABLE restaurant(
+	res_id INT PRIMARY KEY AUTO_INCREMENT,
+	res_name VARCHAR(200) NOT NULL,
+	image VARCHAR(200) NOT NULL,
+	desc_res VARCHAR(200) NOT NULL
+);
+---Rate res---
+CREATE TABLE rate_res(
+	user_id INT(255),
+	res_id INT(255),
+	amount INT(255),
+	date_rate DATETIME,
+	FOREIGN KEY (user_id) REFERENCES users(user_id),
+	FOREIGN KEY (res_id) REFERENCES restaurant(res_id)
+);
+---Like_res---
+CREATE TABLE like_res(
+	user_id INT(255),
+	res_id INT(255),
+	date_like DATETIME,
+	FOREIGN KEY (user_id) REFERENCES users(user_id),
+	FOREIGN KEY (res_id) REFERENCES restaurant(res_id)
+);
+---Food type table---
+CREATE TABLE food_type(
+	type_id INT PRIMARY KEY AUTO_INCREMENT,
+	type_name VARCHAR(200) NOT NULL
+);
+---Food table---
+CREATE TABLE food(
+	food_id INT PRIMARY KEY AUTO_INCREMENT,
+	food_name VARCHAR(150) NOT NULL,
+	image VARCHAR(200) NOT NULL,
+	price FLOAT(7,4) NOT NULL,
+	desc_food VARCHAR(200) NOT NULL,
+	type_id INT(150),
+	FOREIGN KEY (type_id) REFERENCES food_type(type_id)
+);
+---Sub food table---
+CREATE TABLE sub_food(
+	sub_id INT PRIMARY KEY AUTO_INCREMENT,
+	sub_name VARCHAR(150) NOT NULL,
+	sub_pricem FLOAT(7,4) NOT NULL,
+	food_id INT(150),
+	FOREIGN KEY (food_id) REFERENCES food(food_id)
+);
+---Order table---
+CREATE TABLE orders(
+	user_id INT,
+	food_id INT(150) NOT NULL,
+	amount INT(200) NOT NULL,
+	code VARCHAR(20) NOT NULL,
+	arr_sub_id VARCHAR(255) NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES users(user_id)
+	FOREIGN KEY (food_id) REFERENCES food(food_id)
+);
+
+
+--5 nguoi like nhieu nhat
+SELECT user_id , count(user_id) FROM like_res
+GROUP BY user_id
+ORDER BY count(user_id) DESC 
+LIMIT 5
+
+--2 nha duoc like nhieu nhat
+SELECT res_id , count(res_id) FROM like_res
+GROUP BY res_id
+ORDER BY count(res_id) DESC 
+LIMIT 2
+
+--nguoi dat hang nhieu nhat
+SELECT user_id, count(user_id) FROM orders
+GROUP BY user_id
+ORDER BY count(user_id) DESC 
+LIMIT 1
+
